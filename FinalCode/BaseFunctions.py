@@ -32,7 +32,7 @@ def load_stocks(stock_name, hours_to_load=12, periods=(20, 50, 200)):
                 dataset[key]["INTERPOLATED"] = True
     mt5.shutdown()
     for period in periods:
-        dataset = EMA(dataset, period)
+        dataset = exponential_moving_average(dataset, period)
     return dataset
 
 
@@ -41,15 +41,16 @@ def normalise(x):
     return np.divide(np.subtract(x, np.mean(x)), np.std(x))
 
 
-def conv_1D(x, kernals, confidence_level, confidence_uncertainty):
+def conv_1d(x, kernals, confidence_level, confidence_uncertainty):
     lists = []
     for kernal in kernals:
         convolved_result = [np.mean(np.multiply(normalise(x[i - kernal.__len__():i]), kernal)) for i in range(kernal.__len__(), x.__len__())]
         lists.append([0 for i in range(kernal.__len__())] + convolved_result)
-    level, deviation = np.mean(np.array(lists)), np.std(np.array(lists))
+    level, deviation = np.mean(np.array(lists), axis=0), np.std(np.array(lists), axis=0)
     listed = []
     for i in range(level.shape[0]):
-        if abs(level[i]) >= confidence_level and deviation[i] <= confidence_level:
+        print(f"{level[i]:3.2f}, {deviation[i]:3.2f}")
+        if abs(level[i]) >= confidence_level and deviation[i] <= confidence_uncertainty:
             if np.sign(level[i]) == 1:
                 listed.append("Positive")
             elif np.sign(level[i]) == -1:
@@ -61,7 +62,7 @@ def conv_1D(x, kernals, confidence_level, confidence_uncertainty):
     return listed
 
 
-def EMA(dataset, period):
+def exponential_moving_average(dataset, period):
     k = 2 / (period + 1)
     for key in sorted(dataset.keys()):
         if key == min(dataset.keys()):
@@ -69,3 +70,4 @@ def EMA(dataset, period):
         else:
             dataset[key]["EMA {0}".format(period)] = dataset[key]["CLOSE"]*k + dataset[key-dt.timedelta(minutes=20)]["EMA {0}".format(period)]*(1-k)
     return dataset
+
