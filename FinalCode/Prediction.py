@@ -40,7 +40,7 @@ phase_filters = [normalise(kernal) for kernal in phase_filters]
 
 LATEST_STOCK_DATA = {}
 for stock in STOCKS:
-    LATEST_STOCK_DATA[stock] = load_stocks(stock, HOURS_TO_LOAD, (20, 50, 200))
+    LATEST_STOCK_DATA[stock] = load_stocks_20m(stock, HOURS_TO_LOAD, (20, 50, 200))
     convolution_result = conv_1d([LATEST_STOCK_DATA[stock][key]["CLOSE"] for key in sorted(LATEST_STOCK_DATA[stock].keys())], phase_filters, phase_confidence_level, phase_confidence_uncertainty)
     for i in range(len(LATEST_STOCK_DATA[stock].keys())):
         key = sorted(LATEST_STOCK_DATA[stock].keys())[i]

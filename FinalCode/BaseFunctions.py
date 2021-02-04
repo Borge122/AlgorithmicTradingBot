@@ -4,7 +4,7 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 
-def load_stocks(stock_name, hours_to_load=12, periods=(20, 50, 200)):
+def load_stocks_20m(stock_name, hours_to_load=12, periods=(20, 50, 200)):
     mt5.initialize()
     stock_data = mt5.copy_rates_range(stock_name, mt5.TIMEFRAME_M20, dt.datetime.now() - dt.timedelta(hours=hours_to_load), dt.datetime.now())
 
