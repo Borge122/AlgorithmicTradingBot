@@ -25,9 +25,9 @@ STOCKS = [
     "EURJPY",
 ]
 STOCKS = ["GBPUSD"]
-HOURS_TO_LOAD = 24*10
-phase_confidence_level = 0.8
-phase_confidence_uncertainty = 0.4
+HOURS_TO_LOAD = 24*30
+phase_confidence_level = 0.5
+phase_confidence_uncertainty = 0.2
 '''-----------------------------------------------'''
 phase_filters = [
     np.array([1, 3, 2, 4]),
@@ -56,10 +56,15 @@ for stock in STOCKS:
 
 for i in range(len(LATEST_STOCK_DATA[STOCKS[0]].keys())-1):
     key = sorted(LATEST_STOCK_DATA[STOCKS[0]].keys())
-    if LATEST_STOCK_DATA[STOCKS[0]][key[i]]["PHASE_CONV"] == LATEST_STOCK_DATA[STOCKS[0]][key[i]]["STACKING_ORDER"] == "Positive":
+    if checker(LATEST_STOCK_DATA[STOCKS[0]][key[i]]) == "Positive":
         plt.plot([i, i+1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i+1]]["CLOSE"]], c=colouriser("Positive"))
-    elif LATEST_STOCK_DATA[STOCKS[0]][key[i]]["PHASE_CONV"] == LATEST_STOCK_DATA[STOCKS[0]][key[i]]["STACKING_ORDER"] == "Negative":
+    elif checker(LATEST_STOCK_DATA[STOCKS[0]][key[i]]) == "Negative":
         plt.plot([i, i + 1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i + 1]]["CLOSE"]], c=colouriser("Negative"))
     else:
         plt.plot([i, i + 1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i + 1]]["CLOSE"]], c=colouriser(False))
+
+
+#plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 20"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
+#plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 50"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
+#plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 200"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
 plt.show()

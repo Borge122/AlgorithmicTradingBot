@@ -38,7 +38,10 @@ def load_stocks(stock_name, hours_to_load=12, periods=(20, 50, 200)):
 
 def normalise(x):
     x = np.array(x)
-    return np.divide(np.subtract(x, np.mean(x)), np.std(x))
+    if np.std(x) == 0:
+        return np.subtract(x, np.mean(x))
+    else:
+        return np.divide(np.subtract(x, np.mean(x)), np.std(x))
 
 
 def conv_1d(x, kernals, confidence_level, confidence_uncertainty):
@@ -78,3 +81,12 @@ def colouriser(x):
         return [1, 0, 0]
     else:
         return [0, 0, 0]
+
+
+def checker(x):
+    if x["STACKING_ORDER"] == x["PHASE_CONV"] == "Positive":
+        return "Positive"
+    elif x["STACKING_ORDER"] == x["PHASE_CONV"] == "Negative":
+        return "Negative"
+    else:
+        return False
