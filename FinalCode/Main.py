@@ -26,7 +26,7 @@ STOCKS = [
 ]
 STOCKS = ["GBPUSD"]
 HOURS_TO_LOAD = 24*10
-phase_confidence_level = 0.75
+phase_confidence_level = 0.8
 phase_confidence_uncertainty = 0.4
 '''-----------------------------------------------'''
 phase_filters = [
@@ -53,8 +53,13 @@ for stock in STOCKS:
         else:
             LATEST_STOCK_DATA[stock][key]["STACKING_ORDER"] = False
 
-plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["CLOSE"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
-plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 20"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
-plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 50"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
-plt.plot([LATEST_STOCK_DATA[STOCKS[0]][key]["EMA 200"] for key in LATEST_STOCK_DATA[STOCKS[0]].keys()])
+
+for i in range(len(LATEST_STOCK_DATA[STOCKS[0]].keys())-1):
+    key = sorted(LATEST_STOCK_DATA[STOCKS[0]].keys())
+    if LATEST_STOCK_DATA[STOCKS[0]][key[i]]["PHASE_CONV"] == LATEST_STOCK_DATA[STOCKS[0]][key[i]]["STACKING_ORDER"] == "Positive":
+        plt.plot([i, i+1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i+1]]["CLOSE"]], c=colouriser("Positive"))
+    elif LATEST_STOCK_DATA[STOCKS[0]][key[i]]["PHASE_CONV"] == LATEST_STOCK_DATA[STOCKS[0]][key[i]]["STACKING_ORDER"] == "Negative":
+        plt.plot([i, i + 1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i + 1]]["CLOSE"]], c=colouriser("Negative"))
+    else:
+        plt.plot([i, i + 1], [LATEST_STOCK_DATA[STOCKS[0]][key[i]]["CLOSE"], LATEST_STOCK_DATA[STOCKS[0]][key[i + 1]]["CLOSE"]], c=colouriser(False))
 plt.show()

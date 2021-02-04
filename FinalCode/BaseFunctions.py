@@ -49,7 +49,6 @@ def conv_1d(x, kernals, confidence_level, confidence_uncertainty):
     level, deviation = np.mean(np.array(lists), axis=0), np.std(np.array(lists), axis=0)
     listed = []
     for i in range(level.shape[0]):
-        print(f"{level[i]:3.2f}, {deviation[i]:3.2f}")
         if abs(level[i]) >= confidence_level and deviation[i] <= confidence_uncertainty:
             if np.sign(level[i]) == 1:
                 listed.append("Positive")
@@ -71,3 +70,11 @@ def exponential_moving_average(dataset, period):
             dataset[key]["EMA {0}".format(period)] = dataset[key]["CLOSE"]*k + dataset[key-dt.timedelta(minutes=20)]["EMA {0}".format(period)]*(1-k)
     return dataset
 
+
+def colouriser(x):
+    if x == "Positive":
+        return [0, 1, 0]
+    elif x == "Negative":
+        return [1, 0, 0]
+    else:
+        return [0, 0, 0]
