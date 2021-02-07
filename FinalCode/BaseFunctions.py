@@ -178,7 +178,7 @@ def normalise(x):
 
 def conv_1d(x, kernals, confidence_level, confidence_uncertainty):
     '''
-    Performs a one dimensional discrete convolution. Applied retrospectivly
+    Performs a one dimensional discrete convolution. Applied retrospectively
     :param x: The list of data to be convolved.
     :param kernals: The filter(s) to be used in the convolution. These should be numpy arrays in a list [filter1, filter2... ]
     :return: A list of convolved results for each filter.
