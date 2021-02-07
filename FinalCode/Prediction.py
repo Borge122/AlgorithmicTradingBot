@@ -24,18 +24,17 @@ STOCKS = [
     "AUDCAD",
     "EURJPY",
 ]
-STOCKS = ["GBPUSD"]
-LOAD_DATA_FROM = dt.datetime.strptime("01/01/2021 17:00:00", "%d/%m/%Y %H:%M:%S")
+STOCKS = ["AUDUSD"]
+LOAD_DATA_FROM = dt.datetime.strptime("01/12/2020 0:00:00", "%d/%m/%Y %H:%M:%S")
 phase_confidence_level = 0.95
 phase_uncertainty = 0.25
-std_bounce = 1
+std_bounce = 5
 '''-----------------------------------------------'''
 phase_filters = [
-    np.array([1, 2, 3, 2, 3]),
-    np.array([1, 2.5, 3, 2, 2, 3.5]),
-    np.array([0, 0.5, 1, 3, 2, 4]),
-    np.array([0, 1, 2, 3, 2, 4]),
-    np.array([-1, 1, 2, 1, 2]),
+    np.array([-1, 0.75, 1.75, 2, 0.5, 2]),
+    np.array([-1, 0, 1, 2, 0.5, 1]),
+    np.array([0, 0.25, 0.5, 2, 1, 1.5]),
+    np.array([0, 1, 0.5, 0.75]),
 ]
 
 LATEST_STOCK_DATA = {}
