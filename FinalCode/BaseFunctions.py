@@ -4,6 +4,28 @@ import datetime as dt
 import matplotlib.pyplot as plt
 
 
+def load_stocks_1m(stock_name, load_from_datetime, load_to_datetime, ema_periods=(20, 50, 200)):
+    '''
+    Loads minutely stock data.
+    :param stock_name: The symbol code, e.g. AUDUSD
+    :param load_from_datetime: This should be a datetime value e.g. dt.datetime.strptime("07/02/2020 15:00:00", "%d/%m/%Y %H:%M:%S")
+    :param load_to_datetime: This should be a datetime value e.g. dt.datetime.strptime("07/02/2020 16:00:00", "%d/%m/%Y %H:%M:%S")
+    :param ema_periods: A tuple indicating the periods for which EMA should be calculated.
+    :return: Returns a dictionary indexed by time. Each index is then a further dictionary see {dictionary}.keys() for more details
+    '''
+
+    mt5.initialize()
+    stock_data = mt5.copy_rates_range(stock_name, mt5.TIMEFRAME_M1, load_from_datetime, load_to_datetime)
+    dataset = {}
+
+    for datapoint in stock_data:
+        dataset[dt.datetime.utcfromtimestamp(datapoint[0])] = {"OPEN": datapoint[1], "HIGH": datapoint[2], "LOW": datapoint[3], "CLOSE": datapoint[4], "VOLUME": datapoint[5], "SPREAD": datapoint[6]}
+    mt5.shutdown()
+    for period in ema_periods:
+        dataset = exponential_moving_average(dataset, period)
+    return dataset
+
+
 def load_stocks_1d(stock_name, load_from_datetime, ema_periods=(20, 50, 200)):
     '''
     Loads daily stock data.
