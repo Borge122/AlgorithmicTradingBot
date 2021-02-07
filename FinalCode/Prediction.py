@@ -24,22 +24,24 @@ STOCKS = [
     "AUDCAD",
     "EURJPY",
 ]
-STOCKS = ["BTCUSD"]
-LOAD_DATA_FROM = dt.datetime.strptime("03/02/2021 17:00:00", "%d/%m/%Y %H:%M:%S")
-phase_confidence_level = 0.9
-phase_uncertainty = 0.5
+STOCKS = ["GBPUSD"]
+LOAD_DATA_FROM = dt.datetime.strptime("01/01/2021 17:00:00", "%d/%m/%Y %H:%M:%S")
+phase_confidence_level = 0.95
+phase_uncertainty = 0.25
+std_bounce = 1
 '''-----------------------------------------------'''
 phase_filters = [
-    np.array([1, 3, 2, 4]),
-    np.array([0, 3, 2, 5]),
-    np.array([0, 1, 2, 1, 2]),
+    np.array([1, 2, 3, 2, 3]),
+    np.array([1, 2.5, 3, 2, 2, 3.5]),
+    np.array([0, 0.5, 1, 3, 2, 4]),
+    np.array([0, 1, 2, 3, 2, 4]),
     np.array([-1, 1, 2, 1, 2]),
-    #np.array([0, 3, 2])
 ]
 
 LATEST_STOCK_DATA = {}
 for stock in STOCKS:
     LATEST_STOCK_DATA[stock] = load_stocks_1h(stock, LOAD_DATA_FROM, (20, 50, 200))
+    LATEST_STOCK_DATA[stock] = bounce_off_20_ema(LATEST_STOCK_DATA[stock], std_bounce)
     convolution_result = conv_1d([LATEST_STOCK_DATA[stock][key]["CLOSE"] for key in sorted(LATEST_STOCK_DATA[stock].keys())], phase_filters)
     list_of_significant_convolutions = convolutional_significance(convolution_result, phase_confidence_level, phase_uncertainty)
 

@@ -194,9 +194,37 @@ def colouriser(x):
 
 def checker(x):
     '''Checks multiple values of signifcance to see whether their is agreement.'''
-    if x["PHASE_CONV"] == x["PHASE_CONV"] == "Positive":
+    if x["PHASE_CONV"] == x["STACKING_ORDER"] == "Positive" and x["BOUNCE"]:
         return "Positive"
-    elif x["PHASE_CONV"] == x["PHASE_CONV"] == "Negative":
+    elif x["PHASE_CONV"] == x["STACKING_ORDER"] == "Negative" and x["BOUNCE"]:
         return "Negative"
     else:
         return False
+
+
+def bounce_off_20_ema(dataset, below_std):
+    '''
+    Calculates whether the stock has bounced off the 20 EMA line.
+    :param dataset: Stock data from load_stock_{} module(s)
+    :param below_std: The difference is normalised, then those which fall under below_std are registered as a bounce
+    :return: The same dataset but with a new key for bounces (True or False)
+    '''
+    listed = []
+    for key in sorted(dataset.keys()):
+        if "EMA 20" in dataset[key].keys():
+            listed.append(dataset[key]["CLOSE"] - dataset[key]["EMA 20"])
+        else:
+            raise ValueError("To use this function, please ensure the 20 EMA period is calculated.")
+    listed = normalise(np.array(listed))
+    bounces = np.zeros_like(listed)
+    bounces[np.where(abs(listed) < below_std)] += 1
+
+    for i in range(len(dataset.keys())):
+        key = sorted(dataset.keys())[i]
+        if bounces[i] == 1:
+            dataset[key]["BOUNCE"] = True
+        elif bounces[i] == 0:
+            dataset[key]["BOUNCE"] = False
+        else:
+            raise ValueError("Something went wrong!")
+    return dataset

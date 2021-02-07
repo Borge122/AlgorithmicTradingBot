@@ -2,8 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 kernals = [
-    np.array([0, 2, 1.5, 3, 1.5, 2, 0]),
-    np.array([0, 1, .5, 3, .5, 1, 0]),
+    np.array([1, 2, 3, 2, 3]),
+    np.array([1, 2.5, 3, 2, 2, 3.5]),
+    np.array([0, 0.5, 1, 3, 2, 4]),
+    np.array([0, 1, 2, 3, 2, 4]),
+    np.array([-1, 1, 2, 1, 2]),
 ]
 
 
