@@ -68,27 +68,6 @@ def load_stocks_4h(stock_name, load_from_datetime, ema_periods=(20, 50, 200)):
     return dataset
 
 
-def load_stocks_4h(stock_name, load_from_datetime, ema_periods=(20, 50, 200)):
-    '''
-    Loads 4-hourly stock data.
-    :param stock_name: The symbol code, e.g. AUDUSD
-    :param load_from_datetime: This should be a datetime value e.g. dt.datetime.strptime("07/02/2020 15:00:00", "%d/%m/%Y %H:%M:%S")
-    :param ema_periods: A tuple indicating the periods for which EMA should be calculated.
-    :return: Returns a dictionary indexed by time. Each index is then a further dictionary see {dictionary}.keys() for more details
-    '''
-
-    mt5.initialize()
-    stock_data = mt5.copy_rates_range(stock_name, mt5.TIMEFRAME_H4, load_from_datetime, dt.datetime.now())
-    dataset = {}
-
-    for datapoint in stock_data:
-        dataset[dt.datetime.utcfromtimestamp(datapoint[0])] = {"OPEN": datapoint[1], "HIGH": datapoint[2], "LOW": datapoint[3], "CLOSE": datapoint[4], "VOLUME": datapoint[5], "SPREAD": datapoint[6]}
-    mt5.shutdown()
-    for period in ema_periods:
-        dataset = exponential_moving_average(dataset, period)
-    return dataset
-
-
 def load_stocks_1h(stock_name, load_from_datetime, ema_periods=(20, 50, 200)):
     '''
     Loads hourly stock data.
@@ -216,9 +195,9 @@ def colouriser(x):
 
 def checker(x):
     '''Checks multiple values of signifcance to see whether their is agreement.'''
-    if x["PHASE_CONV"] == x["STACKING_ORDER"] == "Positive": #and x["BOUNCE"]:
+    if x["PHASE_CONV"] == x["PHASE_CONV"] == "Positive": #and x["BOUNCE"]:
         return "Positive"
-    elif x["PHASE_CONV"] == x["STACKING_ORDER"] == "Negative": #and x["BOUNCE"]:
+    elif x["PHASE_CONV"] == x["PHASE_CONV"] == "Negative": #and x["BOUNCE"]:
         return "Negative"
     else:
         return False
