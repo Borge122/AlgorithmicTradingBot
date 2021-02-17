@@ -195,9 +195,9 @@ def colouriser(x):
 
 def checker(x):
     '''Checks multiple values of signifcance to see whether their is agreement.'''
-    if x["PHASE_CONV"] == x["PHASE_CONV"] == "Positive": #and x["BOUNCE"]:
+    if x["PHASE_CONV"] == x["STACKING_ORDER"] == "Positive": # and x["BOUNCE"]:
         return "Positive"
-    elif x["PHASE_CONV"] == x["PHASE_CONV"] == "Negative": #and x["BOUNCE"]:
+    elif x["PHASE_CONV"] == x["STACKING_ORDER"] == "Negative": # and x["BOUNCE"]: # STACKING_ORDER # PHASE_CONV
         return "Negative"
     else:
         return False
