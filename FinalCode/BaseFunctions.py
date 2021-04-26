@@ -229,3 +229,51 @@ def bounce_off_20_ema(dataset, below_std):
         else:
             raise ValueError("Something went wrong!")
     return dataset
+
+
+def buy(stock_name, volume):
+    '''
+    Buy stock. Note, you must login with mt5.login(accountNo, password) prior to this
+    For this function to work, you must also enable autotrading by pressing the "Algo trading" button
+    :param stock_name: The symbol code
+    :param volume: Volume in lots. E.g. 0.01 is £1k in GBPUSD
+    :return: Success/Failure
+    '''
+    symbol_info = mt5.symbol_info(stock_name)
+    if symbol_info is None or not symbol_info.visible:
+        return False
+
+    request = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "type": mt5.ORDER_TYPE_BUY,
+            "symbol": stock_name,
+            "volume": volume,
+            "price": mt5.symbol_info_tick(stock_name).ask
+            }
+
+    result = mt5.order_send(request)
+    return True
+
+
+def sell(stock_name, volume):
+    '''
+    Buy stock. Note, you must login with mt5.login(accountNo, password) prior to this
+    For this function to work, you must also enable autotrading by pressing the "Algo trading" button
+    :param stock_name: The symbol code
+    :param volume: Volume in lots. E.g. 0.01 is £1k in GBPUSD
+    :return: Success/Failure
+    '''
+    symbol_info = mt5.symbol_info(stock_name)
+    if symbol_info is None or not symbol_info.visible:
+        return False
+
+    request = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "type": mt5.ORDER_TYPE_SELL,
+            "symbol": stock_name,
+            "volume": volume,
+            "price": mt5.symbol_info_tick(stock_name).ask
+            }
+
+    result = mt5.order_send(request)
+    return True
