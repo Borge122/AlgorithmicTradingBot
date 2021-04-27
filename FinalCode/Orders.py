@@ -1,3 +1,8 @@
+'''
+Usage:
+    orders[i] = Orders.buy("EURUSD", 0.01)
+    Orders.close(orders[i])
+'''
 import MetaTrader5 as mt5
 
 
@@ -50,7 +55,7 @@ def sell(stock_name, volume):
     }
     return Order(mt5.order_send(request), request)
 
-def close_trade(order):
+def close(order):
     """
     Improved version of stolen stackoverflow code. Closes a trade order
     :param order: class Order
