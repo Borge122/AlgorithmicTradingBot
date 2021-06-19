@@ -1,32 +1,38 @@
-import Orders, BaseFunctions, MetaTrader5 as mt5
+import MetaTrader5 as mt5
+import random
+import FinalCode.Orders as Orders
 
-account = 123456;
-password = "A1b2C3!ksdlhg"
+account = 820585
+password = "29Lf9IT6"
 
 if not mt5.initialize():
     print(mt5.last_error())
-    return 1
-if not mt5.login(account, password):
+    raise ValueError("Error! Did not initialise")
+if not mt5.login(account, password=password):
     print(mt5.last_error())
-    return 1
+    raise ValueError("Error! Did not login")
 
 symbols = {"EURGBP": [], "GBPUSD": [], "EURUSD": []}
 
-mt5.symbol_select("EURGBP", true)
-mt5.symbol_select("GBPUSD", true)
-mt5.symbol_select("EURUSD", true)
+mt5.symbol_select("EURGBP", True)
+mt5.symbol_select("GBPUSD", True)
+mt5.symbol_select("EURUSD", True)
+
 
 def algorithm():
-    return {"EURGBP": [random.getrandbits(2)), bool(random.getrandbits(1))], "GBPUSD": [random.getrandbits(2)), bool(random.getrandbits(1))], "EURUSD": [random.getrandbits(2)), bool(random.getrandbits(1))]}
+    return {"EURGBP": [random.randint(2), [True, False][random.randint(2)]],
+            "GBPUSD": [random.randint(2), [True, False][random.randint(2)]],
+            "EURUSD": [random.randint(2), [True, False][random.randint(2)]]}
 
-items = algorithm();
+
+items = algorithm()
 for symbol in items:
     if items[symbol][0] == 0:
         symbols[symbol].append(Orders.buy(symbol, 0.01))
     if items[symbol][0] == 1:
         symbols[symbol].append(Orders.sell(symbol, 0.01))
-    if items[symbol][1] == True:
+    if items[symbol][1]:
         for order in symbols[symbol]:
-            Order.close(order)
+            Orders.close(order)
 
-mt5.shutdown();
+mt5.shutdown()
